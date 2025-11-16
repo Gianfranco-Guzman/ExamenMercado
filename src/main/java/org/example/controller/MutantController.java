@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.dto.DnaRequest;
 import org.example.dto.StatsResponse;
 import org.example.service.MutantService;
+import org.example.service.StatsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class MutantController {
 
     private final MutantService mutantService;
+    private final StatsService statsService;
 
     @PostMapping("/mutant")
     public ResponseEntity<Void> checkMutant(@RequestBody DnaRequest request) {
@@ -26,8 +28,7 @@ public class MutantController {
 
     @GetMapping("/stats")
     public ResponseEntity<StatsResponse> getStats() {
-        // Lógica para obtener estadísticas irá aquí
-        StatsResponse stats = new StatsResponse(0, 0, 0.0); // Placeholder
+        StatsResponse stats = statsService.getStats();
         return ResponseEntity.ok(stats);
     }
 }
