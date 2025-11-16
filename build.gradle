@@ -1,17 +1,23 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'jacoco'
 }
 
 group = 'org.example'
-version = '1.0-SNAPSHOT'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
 
 repositories {
     mavenCentral()
 }
 
-
 dependencies {
-    // Spring Boot
+    // Spring Boot (versions managed by dependency-management plugin)
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -30,8 +36,6 @@ dependencies {
 
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
@@ -54,7 +58,7 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                     '**/MutantDetectorApplication.class',
                     '**/config/**',
-                    '**/*$*' // Excluir clases internas generadas por Lombok
+                    '**/*$*' // Exclude Lombok-generated inner classes
             ])
         }))
     }
@@ -68,14 +72,4 @@ jacocoTestCoverageVerification {
             }
         }
     }
-}
-
-
-
-tasks.jar {
-    enabled = true
-}
-
-bootJar {
-    enabled = true
 }
