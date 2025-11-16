@@ -2,6 +2,7 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entity.DnaRecord;
+import org.example.exception.DnaHashCalculationException;
 import org.example.repository.DnaRecordRepository;
 import org.springframework.stereotype.Service;
 
@@ -48,9 +49,7 @@ public class MutantServiceImpl implements MutantService {
             }
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
-            // En un caso real, aquí se manejaría el error de forma más robusta.
-            // Por simplicidad, lanzamos una excepción en tiempo de ejecución.
-            throw new RuntimeException("Error calculating SHA-256 hash", e);
+            throw new DnaHashCalculationException("Error calculating SHA-256 hash", e);
         }
     }
 }

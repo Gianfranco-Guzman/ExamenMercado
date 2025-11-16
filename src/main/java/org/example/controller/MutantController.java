@@ -6,11 +6,13 @@ import org.example.dto.StatsResponse;
 import org.example.service.MutantService;
 import org.example.service.StatsService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
 @RequiredArgsConstructor
+@Validated
 public class MutantController {
 
     private final MutantService mutantService;
