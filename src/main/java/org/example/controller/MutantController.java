@@ -17,18 +17,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/")
 @RequiredArgsConstructor
-@Tag(name = "Mutant API", description = "API for detecting mutants and providing DNA verification statistics")
+@Tag(name = "API de Mutantes", description = "API para detectar mutantes y proveer estadísticas de verificación de ADN.")
 public class MutantController {
 
     private final MutantService mutantService;
     private final StatsService statsService;
 
     @PostMapping("/mutant")
-    @Operation(summary = "Determines if a DNA sequence belongs to a mutant")
+    @Operation(summary = "Determina si una secuencia de ADN pertenece a un mutante.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "The DNA sequence belongs to a mutant"),
-            @ApiResponse(responseCode = "403", description = "The DNA sequence belongs to a human"),
-            @ApiResponse(responseCode = "400", description = "The provided DNA sequence is invalid")
+            @ApiResponse(responseCode = "200", description = "La secuencia de ADN pertenece a un mutante."),
+            @ApiResponse(responseCode = "403", description = "La secuencia de ADN pertenece a un humano."),
+            @ApiResponse(responseCode = "400", description = "La secuencia de ADN provista es inválida.")
     })
     public ResponseEntity<Void> isMutant(@Validated @RequestBody DnaRequest request) {
         boolean isMutant = mutantService.isMutant(request.getDna());
@@ -36,8 +36,8 @@ public class MutantController {
     }
 
     @GetMapping("/stats")
-    @Operation(summary = "Retrieves statistics of DNA verifications")
-    @ApiResponse(responseCode = "200", description = "Successfully retrieved statistics")
+    @Operation(summary = "Recupera las estadísticas de las verificaciones de ADN.")
+    @ApiResponse(responseCode = "200", description = "Estadísticas recuperadas exitosamente.")
     public ResponseEntity<StatsResponse> getStats() {
         return ResponseEntity.ok(statsService.getStats());
     }

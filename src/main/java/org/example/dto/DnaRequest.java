@@ -6,13 +6,13 @@ import lombok.Data;
 import org.example.validation.ValidDnaSequence;
 
 @Data
-@Schema(description = "Request object for DNA sequence verification")
+@Schema(description = "Objeto de solicitud para la verificación de secuencias de ADN.")
 public class DnaRequest {
 
-    @NotNull(message = "DNA sequence cannot be null")
+    @NotNull(message = "La secuencia de ADN no puede ser nula.")
     @ValidDnaSequence
-    @Schema(description = "An array of strings representing the DNA sequence matrix (NxN). " +
-            "Each string is a row and must contain only the characters A, T, C, G.",
+    @Schema(description = "Un array de strings que representa la matriz de la secuencia de ADN (NxN). " +
+            "Cada string es una fila y debe contener únicamente los caracteres A, T, C, G.",
             example = "[\"ATGCGA\",\"CAGTGC\",\"TTATGT\",\"AGAAGG\",\"CCCCTA\",\"TCACTG\"]",
             required = true)
     private String[] dna;

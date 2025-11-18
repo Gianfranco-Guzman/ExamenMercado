@@ -18,12 +18,12 @@ public class GlobalExceptionHandler {
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getDefaultMessage())
                 .findFirst()
-                .orElse("Invalid request");
+                .orElse("Solicitud inválida");
 
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
-                "Bad Request",
+                "Solicitud incorrecta",
                 errorMessage,
                 request.getDescription(false).replace("uri=", "")
         );
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal Server Error",
+                "Error Interno del Servidor",
                 ex.getMessage(),
                 request.getDescription(false).replace("uri=", "")
         );
@@ -47,8 +47,8 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal Server Error",
-                "An unexpected error occurred",
+                "Error Interno del Servidor",
+                "Ocurrió un error inesperado",
                 request.getDescription(false).replace("uri=", "")
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

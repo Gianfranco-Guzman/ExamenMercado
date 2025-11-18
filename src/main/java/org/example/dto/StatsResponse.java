@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Response body containing the statistics of DNA verifications.")
+@Schema(description = "Cuerpo de la respuesta que contiene las estadísticas de las verificaciones de ADN.")
 public class StatsResponse {
 
-    @Schema(description = "Total count of mutant DNA sequences verified.", example = "40")
+    @Schema(description = "Conteo total de secuencias de ADN mutante verificadas.", example = "40")
     @JsonProperty("count_mutant_dna")
     private long countMutantDna;
 
-    @Schema(description = "Total count of human DNA sequences verified.", example = "100")
+    @Schema(description = "Conteo total de secuencias de ADN humano verificadas.", example = "100")
     @JsonProperty("count_human_dna")
     private long countHumanDna;
 
-    @Schema(description = "The ratio of mutant to human DNA verifications.", example = "0.4")
+    @Schema(description = "La proporción de verificaciones de ADN mutante a humano.", example = "0.4")
     private double ratio;
 }

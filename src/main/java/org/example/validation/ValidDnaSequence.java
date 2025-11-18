@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ValidDnaSequenceValidator.class)
 public @interface ValidDnaSequence {
-    String message() default "Invalid DNA sequence: must be a square NxN matrix (minimum 4x4) with only A, T, C, G characters";
+    String message() default "Secuencia de ADN inválida: debe ser una matriz cuadrada NxN (mínimo 4x4) con solo los caracteres A, T, C, G.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

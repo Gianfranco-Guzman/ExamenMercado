@@ -7,51 +7,52 @@ import java.util.regex.Pattern;
 @Component
 public class MutantDetector {
 
-    private static final int SEQUENCE_LENGTH = 4;
-    private static final int MIN_SEQUENCES_FOR_MUTANT = 2;
-    private static final Pattern VALID_DNA_PATTERN = Pattern.compile("^[ATCG]+$");
+    private static final int LONGITUD_SECUENCIA = 4;
+    private static final int MIN_SECUENCIAS_PARA_MUTANTE = 2;
+    private static final Pattern PATRON_ADN_VALIDO = Pattern.compile("^[ATCG]+$");
 
     public boolean isMutant(String[] dna) {
-        if (dna == null || dna.length < SEQUENCE_LENGTH) {
+        if (dna == null || dna.length < LONGITUD_SECUENCIA) {
             return false;
         }
 
         final int n = dna.length;
-        int sequenceCount = 0;
+        int contadorSecuencias = 0;
 
-        char[][] matrix = new char[n][];
+        char[][] matriz = new char[n][];
         for (int i = 0; i < n; i++) {
-            if (dna[i] == null || dna[i].length() != n || !VALID_DNA_PATTERN.matcher(dna[i]).matches()) {
+            if (dna[i] == null || dna[i].length() != n || !PATRON_ADN_VALIDO.matcher(dna[i]).matches()) {
                 return false;
             }
-            matrix[i] = dna[i].toCharArray();
+            matriz[i] = dna[i].toCharArray();
         }
 
-        for (int row = 0; row < n; row++) {
+        for (int fila = 0; fila < n; fila++) {
             for (int col = 0; col < n; col++) {
-                // Check in all 4 directions from the current cell
-                if (col <= n - SEQUENCE_LENGTH) {
-                    if (checkHorizontal(matrix, row, col)) {
-                        sequenceCount++;
+                // Se verifica en las 4 direcciones desde la celda actual.
+                if (col <= n - LONGITUD_SECUENCIA) {
+                    if (verificarHorizontal(matriz, fila, col)) {
+                        contadorSecuencias++;
                     }
                 }
-                if (row <= n - SEQUENCE_LENGTH) {
-                    if (checkVertical(matrix, row, col)) {
-                        sequenceCount++;
+                if (fila <= n - LONGITUD_SECUENCIA) {
+                    if (verificarVertical(matriz, fila, col)) {
+                        contadorSecuencias++;
                     }
                 }
-                if (row <= n - SEQUENCE_LENGTH && col <= n - SEQUENCE_LENGTH) {
-                    if (checkDiagonalDescending(matrix, row, col)) {
-                        sequenceCount++;
+                if (fila <= n - LONGITUD_SECUENCIA && col <= n - LONGITUD_SECUENCIA) {
+                    if (verificarDiagonalDescendente(matriz, fila, col)) {
+                        contadorSecuencias++;
                     }
                 }
-                if (row >= SEQUENCE_LENGTH - 1 && col <= n - SEQUENCE_LENGTH) {
-                    if (checkDiagonalAscending(matrix, row, col)) {
-                        sequenceCount++;
+                if (fila >= LONGITUD_SECUENCIA - 1 && col <= n - LONGITUD_SECUENCIA) {
+                    if (verificarDiagonalAscendente(matriz, fila, col)) {
+                        contadorSecuencias++;
                     }
                 }
 
-                if (sequenceCount >= MIN_SEQUENCES_FOR_MUTANT) {
+                // Optimización: si ya se encontraron suficientes secuencias, se retorna true.
+                if (contadorSecuencias >= MIN_SECUENCIAS_PARA_MUTANTE) {
                     return true;
                 }
             }
@@ -60,56 +61,56 @@ public class MutantDetector {
         return false;
     }
 
-    private boolean checkHorizontal(char[][] matrix, int row, int col) {
-        // Prevents double counting by ensuring this is the start of a sequence
-        if (col > 0 && matrix[row][col - 1] == matrix[row][col]) {
+    private boolean verificarHorizontal(char[][] matriz, int fila, int col) {
+        // Evita el doble conteo, asegurando que este es el inicio de una secuencia.
+        if (col > 0 && matriz[fila][col - 1] == matriz[fila][col]) {
             return false;
         }
-        char first = matrix[row][col];
-        for (int i = 1; i < SEQUENCE_LENGTH; i++) {
-            if (matrix[row][col + i] != first) {
+        char primerCaracter = matriz[fila][col];
+        for (int i = 1; i < LONGITUD_SECUENCIA; i++) {
+            if (matriz[fila][col + i] != primerCaracter) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean checkVertical(char[][] matrix, int row, int col) {
-        // Prevents double counting by ensuring this is the start of a sequence
-        if (row > 0 && matrix[row - 1][col] == matrix[row][col]) {
+    private boolean verificarVertical(char[][] matriz, int fila, int col) {
+        // Evita el doble conteo, asegurando que este es el inicio de una secuencia.
+        if (fila > 0 && matriz[fila - 1][col] == matriz[fila][col]) {
             return false;
         }
-        char first = matrix[row][col];
-        for (int i = 1; i < SEQUENCE_LENGTH; i++) {
-            if (matrix[row + i][col] != first) {
+        char primerCaracter = matriz[fila][col];
+        for (int i = 1; i < LONGITUD_SECUENCIA; i++) {
+            if (matriz[fila + i][col] != primerCaracter) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean checkDiagonalDescending(char[][] matrix, int row, int col) {
-        // Prevents double counting by ensuring this is the start of a sequence
-        if (row > 0 && col > 0 && matrix[row - 1][col - 1] == matrix[row][col]) {
+    private boolean verificarDiagonalDescendente(char[][] matriz, int fila, int col) {
+        // Evita el doble conteo, asegurando que este es el inicio de una secuencia.
+        if (fila > 0 && col > 0 && matriz[fila - 1][col - 1] == matriz[fila][col]) {
             return false;
         }
-        char first = matrix[row][col];
-        for (int i = 1; i < SEQUENCE_LENGTH; i++) {
-            if (matrix[row + i][col + i] != first) {
+        char primerCaracter = matriz[fila][col];
+        for (int i = 1; i < LONGITUD_SECUENCIA; i++) {
+            if (matriz[fila + i][col + i] != primerCaracter) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean checkDiagonalAscending(char[][] matrix, int row, int col) {
-        // Prevents double counting by ensuring this is the start of a sequence
-        if (row < matrix.length - 1 && col > 0 && matrix[row + 1][col - 1] == matrix[row][col]) {
+    private boolean verificarDiagonalAscendente(char[][] matriz, int fila, int col) {
+        // Evita el doble conteo, asegurando que este es el inicio de una secuencia.
+        if (fila < matriz.length - 1 && col > 0 && matriz[fila + 1][col - 1] == matriz[fila][col]) {
             return false;
         }
-        char first = matrix[row][col];
-        for (int i = 1; i < SEQUENCE_LENGTH; i++) {
-            if (matrix[row - i][col + i] != first) {
+        char primerCaracter = matriz[fila][col];
+        for (int i = 1; i < LONGITUD_SECUENCIA; i++) {
+            if (matriz[fila - i][col + i] != primerCaracter) {
                 return false;
             }
         }

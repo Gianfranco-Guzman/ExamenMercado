@@ -19,17 +19,22 @@ public class MutantServiceImpl implements MutantService {
 
     @Override
     public boolean isMutant(String[] dna) {
+        // Se calcula el hash del ADN para identificarlo de forma única.
         String dnaHash = calculateDnaHash(dna);
 
-        Optional<DnaRecord> existingRecord = dnaRecordRepository.findByDnaHash(dnaHash);
-        if (existingRecord.isPresent()) {
-            return existingRecord.get().isMutant();
+        // Se busca en la base de datos si este ADN ya fue verificado.
+        Optional<DnaRecord> registroExistente = dnaRecordRepository.findByDnaHash(dnaHash);
+        if (registroExistente.isPresent()) {
+            // Si existe, se retorna el resultado almacenado para evitar recalcular.
+            return registroExistente.get().isMutant();
         }
 
+        // Si no existe, se realiza el análisis para determinar si es mutante.
         boolean isMutant = mutantDetector.isMutant(dna);
 
-        DnaRecord newRecord = new DnaRecord(dnaHash, isMutant);
-        dnaRecordRepository.save(newRecord);
+        // Se crea un nuevo registro con el resultado y se guarda en la base de datos.
+        DnaRecord nuevoRegistro = new DnaRecord(dnaHash, isMutant);
+        dnaRecordRepository.save(nuevoRegistro);
 
         return isMutant;
     }
@@ -49,7 +54,8 @@ public class MutantServiceImpl implements MutantService {
             }
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
-            throw new DnaHashCalculationException("Error calculating SHA-256 hash", e);
+            // Este error no debería ocurrir si el algoritmo SHA-256 está disponible en el JRE.
+            throw new DnaHashCalculationException("Error al calcular el hash SHA-256 del ADN.", e);
         }
     }
 }
