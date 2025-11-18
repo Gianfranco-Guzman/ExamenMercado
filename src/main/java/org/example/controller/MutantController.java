@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/")
@@ -22,6 +23,15 @@ public class MutantController {
 
     private final MutantService mutantService;
     private final StatsService statsService;
+
+    /**
+     * Redirige la ruta raíz ("/") a la página de la interfaz de Swagger.
+     * @return Una redirección a /swagger-ui.html.
+     */
+    @GetMapping("/")
+    public RedirectView redirectToSwagger() {
+        return new RedirectView("/swagger-ui.html");
+    }
 
     @PostMapping("/mutant")
     @Operation(summary = "Determina si una secuencia de ADN pertenece a un mutante.")
